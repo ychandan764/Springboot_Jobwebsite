@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--linkedin-blue);
+            background-color: rgba(10, 102, 194, 0.08);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Content Section */
+        .content-section {
+            padding: 4rem 0;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-title i {
+            color: var(--linkedin-blue);
+            font-size: 2.5rem;
+        }
+        
+        .section-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.1) 0%, rgba(10, 102, 194, 0.05) 100%);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .value-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .value-card:hover {
+            border-color: var(--linkedin-blue);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+        
+        .value-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .value-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .value-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .team-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+        
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .team-card h5 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .team-card .role {
+            color: var(--linkedin-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .team-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 4rem 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: white;
+            margin: 3rem 0;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+        
+        .btn-cta {
+            background: white;
+            color: var(--linkedin-blue);
+            padding: 1rem 2.5rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            color: var(--linkedin-blue);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--linkedin-light);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .section-card {
+                padding: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .values-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <div class="d-flex gap-2">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/jobs" class="nav-link">Jobs</a>
+            <a href="/about" class="nav-link active">About</a>
+            <a href="/contact" class="nav-link">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>About LinkedOut</h1>
+            <p>Connecting talented professionals with amazing opportunities worldwide</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container content-section">
+    
+    <!-- Mission Section -->
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="bi bi-flag"></i>
+            Our Mission
+        </h2>
+        <p class="section-text">
+            LinkedOut is dedicated to revolutionizing the way people find jobs and companies discover talent. 
+            We believe that everyone deserves access to meaningful career opportunities, and every company 
+            should be able to find the perfect candidate for their needs.
+        </p>
+        <p class="section-text">
+            Our platform leverages cutting-edge technology to match job seekers with their ideal positions 
+            while providing recruiters with powerful tools to streamline their hiring process. We're not just 
+            a job board – we're a comprehensive career ecosystem.
+        </p>
+    </div>
+    
+    <!-- Stats Section -->
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Active Jobs</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Job Seekers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">5K+</div>
+            <div class="stat-label">Companies</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Success Rate</div>
+        </div>
+    </div>
+    
+    <!-- Vision Section -->
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="bi bi-eye"></i>
+            Our Vision
+        </h2>
+        <p class="section-text">
+            We envision a world where finding the right job or hiring the perfect candidate is simple, 
+            efficient, and accessible to everyone. Through innovation, transparency, and dedication to 
+            excellence, we're building the future of recruitment.
+        </p>
+        <p class="section-text">
+            By 2030, we aim to become the world's most trusted job platform, facilitating millions of 
+            successful career connections and helping businesses grow by finding exceptional talent.
+        </p>
+    </div>
+    
+    <!-- Core Values -->
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="bi bi-star"></i>
+            Our Core Values
+        </h2>
+        
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-heart"></i>
+                </div>
+                <h4>Integrity</h4>
+                <p>We operate with honesty and transparency in everything we do, building trust with our users and partners.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-lightning"></i>
+                </div>
+                <h4>Innovation</h4>
+                <p>We constantly push boundaries and embrace new technologies to improve the job search experience.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h4>Inclusivity</h4>
+                <p>We believe in equal opportunities for all, regardless of background, experience, or location.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+                <h4>Excellence</h4>
+                <p>We strive for the highest quality in our platform, services, and user experience.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h4>Security</h4>
+                <p>We prioritize the privacy and security of user data, implementing industry-leading protection measures.</p>
+            </div>
+            
+            <div class="value-card">
+                <div class="value-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <h4>Growth</h4>
+                <p>We support continuous learning and development for both our users and our team members.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- What We Offer -->
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="bi bi-gift"></i>
+            What We Offer
+        </h2>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="color: var(--linkedin-blue); margin-top: 1rem;">For Job Seekers</h4>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li>Access to thousands of verified job listings</li>
+                    <li>Easy one-click application process</li>
+                    <li>Real-time application tracking</li>
+                    <li>Personalized job recommendations</li>
+                    <li>Career resources and guidance</li>
+                    <li>Professional networking opportunities</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h4 style="color: var(--linkedin-blue); margin-top: 1rem;">For Recruiters</h4>
+                <ul style="color: var(--text-secondary); line-height: 2;">
+                    <li>Powerful candidate search and filtering</li>
+                    <li>Streamlined application management</li>
+                    <li>Applicant tracking system</li>
+                    <li>Company branding and visibility</li>
+                    <li>Analytics and insights</li>
+                    <li>Priority customer support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team Section -->
+    <div class="section-card">
+        <h2 class="section-title">
+            <i class="bi bi-person-badge"></i>
+            Meet Our Team
+        </h2>
+        
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-avatar">JS</div>
+                <h5>Chandan Yadav</h5>
+                <div class="role">CEO & Founder</div>
+                <p>Passionate about connecting talent with opportunities and building innovative solutions.</p>
+            </div>
+            
+            
+        </div>
+    </div>
+    
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <h2>Ready to Start Your Journey?</h2>
+        <p>Join thousands of professionals who have found their dream jobs on LinkedOut</p>
+        <a href="/users/register" class="btn-cta">
+            Get Started Today <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <p>&copy; 2026 LinkedOut. All rights reserved.</p>
+        <div class="mt-2">
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/jobs">Jobs</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

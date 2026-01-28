@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--linkedin-blue);
+            background-color: rgba(10, 102, 194, 0.08);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hero-content p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 4rem 0;
+        }
+        
+        /* Contact Cards Grid */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .contact-card h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .contact-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .contact-card a {
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card a:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 3rem;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: var(--bg-light);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--linkedin-blue);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.1);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+            margin-top: 1rem;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.4);
+        }
+        
+        /* Map Section */
+        .map-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem;
+        }
+        
+        .map-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.1) 0%, rgba(10, 102, 194, 0.05) 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .faq-section h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+        
+        .faq-question i {
+            color: var(--linkedin-blue);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+        
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 2rem;
+        }
+        
+        /* Alert */
+        .alert-success {
+            background: linear-gradient(135deg, rgba(5, 118, 66, 0.1) 0%, rgba(5, 118, 66, 0.05) 100%);
+            border: 2px solid rgba(5, 118, 66, 0.2);
+            color: var(--success-green);
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: var(--linkedin-light);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .form-section {
+                padding: 2rem;
+            }
+            
+            .contact-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-placeholder {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <div class="d-flex gap-2">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/jobs" class="nav-link">Jobs</a>
+            <a href="/about" class="nav-link">About</a>
+            <a href="/contact" class="nav-link active">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Get in Touch</h1>
+            <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container contact-section">
+    
+    <!-- Contact Cards -->
+    <div class="contact-cards">
+        <div class="contact-card">
+            <div class="contact-icon">
+                <i class="bi bi-envelope"></i>
+            </div>
+            <h4>Email Us</h4>
+            <p>Our support team is available 24/7</p>
+            <a href="mailto:support@linkedout.com">
+                support@linkedout.com
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="contact-card">
+            <div class="contact-icon">
+                <i class="bi bi-telephone"></i>
+            </div>
+            <h4>Call Us</h4>
+            <p>Mon-Fri from 8am to 6pm IST</p>
+            <a href="tel:+1234567890">
+                +91 9974658274
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        
+        <div class="contact-card">
+            <div class="contact-icon">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+            <h4>Visit Us</h4>
+            <p>Come say hello at our office</p>
+            <a href="#">
+                Mumbai, Maharashtra
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Contact Form -->
+    <div class="form-section">
+        <div class="form-header">
+            <h2>Send Us a Message</h2>
+            <p>Fill out the form below and we'll get back to you within 24 hours</p>
+        </div>
+        
+        <!-- Success Message (if form submitted) -->
+        <div th:if="${success}" class="alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Thank you for contacting us! We'll get back to you soon.</span>
+        </div>
+        
+        <form th:action="@{/contact}" method="post" id="contactForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span style="color: red;">*</span></label>
+                        <input type="text" 
+                               name="name" 
+                               class="form-control" 
+                               placeholder="Chandan Yadav" 
+                               required>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Email Address <span style="color: red;">*</span></label>
+                        <input type="email" 
+                               name="email" 
+                               class="form-control" 
+                               placeholder="linkedout@gmail.com" 
+                               required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" 
+                               name="phone" 
+                               class="form-control" 
+                               placeholder="+91 9975846253">
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Subject <span style="color: red;">*</span></label>
+                        <select name="subject" class="form-select" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="jobs">Job Posting Question</option>
+                            <option value="account">Account Issue</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Message <span style="color: red;">*</span></label>
+                <textarea name="message" 
+                          class="form-control" 
+                          placeholder="Tell us how we can help you..."
+                          required></textarea>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                <i class="bi bi-send me-2"></i>
+                Send Message
+            </button>
+        </form>
+    </div>
+    
+    <!-- Map Section -->
+    <div class="map-section">
+        <h3>
+            <i class="bi bi-pin-map"></i>
+            Our Location
+        </h3>
+        <div class="map-placeholder">
+            <i class="bi bi-geo-alt" style="font-size: 3rem; margin-right: 1rem;"></i>
+            <div>
+                <strong>LinkedOut Headquarters</strong><br>
+                Mumbai<br>
+               Maharashtra
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h3>Frequently Asked Questions</h3>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <i class="bi bi-question-circle"></i>
+                <span>How quickly will I receive a response?</span>
+            </div>
+            <div class="faq-answer">
+                We typically respond to all inquiries within 24 hours during business days. 
+                For urgent matters, please call our support line.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <i class="bi bi-question-circle"></i>
+                <span>Can I schedule a demo of the platform?</span>
+            </div>
+            <div class="faq-answer">
+                Yes! For recruiters interested in using LinkedOut for their hiring needs, 
+                we offer personalized demos. Select "Partnership Opportunity" as your subject.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <i class="bi bi-question-circle"></i>
+                <span>How do I report a technical issue?</span>
+            </div>
+            <div class="faq-answer">
+                Select "Technical Support" as your subject and provide as much detail as possible 
+                about the issue, including screenshots if available.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <i class="bi bi-question-circle"></i>
+                <span>Do you offer support in other languages?</span>
+            </div>
+            <div class="faq-answer">
+                Currently, our primary support language is English. However, we're working on 
+                expanding our support to include Spanish, French, and Mandarin in the near future.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <i class="bi bi-question-circle"></i>
+                <span>Can I visit your office?</span>
+            </div>
+            <div class="faq-answer">
+                We welcome visitors! Please schedule an appointment in advance by contacting us 
+                through this form or calling our office.
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <p>&copy; 2026 LinkedOut. All rights reserved.</p>
+        <div class="mt-2">
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/jobs">Jobs</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Form validation and submission handling
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    // You can add additional client-side validation here
+    const btn = this.querySelector('.btn-submit');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Sending...';
+});
+</script>
+
+</body>
+</html>

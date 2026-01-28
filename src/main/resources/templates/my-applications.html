@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --warning-yellow: #f59e0b;
+            --danger-red: #dc2626;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        .btn-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            color: var(--linkedin-blue);
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        /* Stats Cards */
+        .stats-section {
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.pending {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
+            color: var(--warning-yellow);
+        }
+        
+        .stat-icon.accepted {
+            background: linear-gradient(135deg, rgba(5, 118, 66, 0.15) 0%, rgba(5, 118, 66, 0.05) 100%);
+            color: var(--success-green);
+        }
+        
+        .stat-icon.rejected {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
+            color: var(--danger-red);
+        }
+        
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-primary);
+        }
+        
+        .stat-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* Application Card */
+        .application-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .application-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+        }
+        
+        .application-card:hover {
+            border-color: var(--linkedin-blue);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(4px);
+        }
+        
+        .application-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .application-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-badge.pending {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+            color: var(--warning-yellow);
+        }
+        
+        .status-badge.accepted {
+            background: linear-gradient(135deg, rgba(5, 118, 66, 0.15) 0%, rgba(5, 118, 66, 0.1) 100%);
+            color: var(--success-green);
+        }
+        
+        .status-badge.rejected {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.1) 100%);
+            color: var(--danger-red);
+        }
+        
+        .application-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .meta-item i {
+            color: var(--linkedin-blue);
+        }
+        
+        .meta-item strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .application-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .btn-view {
+            background: transparent;
+            color: var(--linkedin-blue);
+            border: 2px solid var(--linkedin-blue);
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view:hover {
+            background: var(--linkedin-blue);
+            color: white;
+        }
+        
+        .btn-withdraw {
+            background: transparent;
+            color: var(--danger-red);
+            border: 2px solid var(--danger-red);
+            padding: 0.625rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-withdraw:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .empty-state-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.1) 0%, rgba(10, 102, 194, 0.05) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+        
+        .empty-state-icon i {
+            font-size: 3.5rem;
+            color: var(--linkedin-blue);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-browse {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+        }
+        
+        .btn-browse:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.4);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .application-header {
+                flex-direction: column;
+            }
+            
+            .application-actions {
+                flex-direction: column;
+            }
+            
+            .btn-view,
+            .btn-withdraw {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <a href="/" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <div class="page-header-content">
+            <h1>My Applications</h1>
+            <p>Track and manage your job applications</p>
+        </div>
+    </div>
+</div>
+
+ 
+    
+    <!-- Applications List -->
+    <div th:if="${applications.size() > 0}">
+        <div th:each="app : ${applications}" class="application-card">
+            <div class="application-header">
+                <h3 th:text="${app.jobTitle}">Senior Software Engineer</h3>
+                <span class="status-badge" 
+                      th:classappend="${app.status}"
+                      th:class="status-badge">
+                    <i class="bi" 
+                       th:classappend="${app.status == 'PENDING' ? 'bi-hourglass-split' : (app.status == 'ACCEPTED' ? 'bi-check-circle' : 'bi-x-circle')}"></i>
+                    <span th:text="${app.status}">Pending</span>
+                </span>
+            </div>
+            
+            <div class="application-meta">
+                <div class="meta-item">
+                    <i class="bi bi-building"></i>
+                    <strong th:text="${app.company}">Tech Corp</strong>
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-calendar"></i>
+                    <span>Applied 3 days ago</span>
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-eye"></i>
+                    <span>Viewed by recruiter</span>
+                </div>
+            </div>
+            
+            <div class="application-actions">
+    <a th:href="@{'/jobs/' + ${app.jobId}}" class="btn-view">
+        <i class="bi bi-eye"></i> View Job
+    </a>
+    <form th:if="${app.status.name() == 'PENDING'}"
+      th:action="@{'/applications/withdraw/' + ${app.id}}"
+      method="post"
+      style="display: inline;"
+      onsubmit="return confirm('Are you sure you want to withdraw this application?');">
+      
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    
+    <button type="submit" class="btn-withdraw">
+        <i class="bi bi-x-circle"></i> Withdraw Application
+    </button>
+</form>
+</div>
+        </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div th:if="${applications.size() == 0}" class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-inbox"></i>
+        </div>
+        <h3>No Applications Yet</h3>
+        <p>Start exploring opportunities and apply to jobs that interest you</p>
+        <a href="/jobs" class="btn-browse">
+            <i class="bi bi-search"></i> Browse Jobs
+        </a>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

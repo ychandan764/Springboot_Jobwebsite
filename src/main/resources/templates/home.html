@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - LinkedOut Job Portal</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+        
+        .logo:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        .nav-links .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links .nav-link:hover {
+            color: var(--linkedin-blue);
+            background-color: rgba(10, 102, 194, 0.08);
+        }
+        
+        .nav-links .nav-link.btn-primary {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 2px 8px rgba(10, 102, 194, 0.3);
+        }
+        
+        .nav-links .nav-link.btn-primary:hover {
+            background: linear-gradient(135deg, var(--linkedin-dark) 0%, var(--linkedin-blue) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.4);
+        }
+        
+        /* User Profile Dropdown */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(10, 102, 194, 0.05);
+        }
+        
+        .user-profile:hover {
+            background: rgba(10, 102, 194, 0.1);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .dropdown-menu {
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border-color);
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+        
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(10, 102, 194, 0.08);
+            color: var(--linkedin-blue);
+        }
+        
+        .dropdown-item i {
+            font-size: 1.1rem;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0a66c2 0%, #004182 50%, #0a66c2 100%);
+            position: relative;
+            padding: 5rem 0;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero p.lead {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.75rem;
+            box-shadow: var(--shadow-lg);
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        
+        .search-bar .input-group {
+            gap: 0.5rem;
+        }
+        
+        .search-bar .form-control {
+            border: 2px solid var(--border-color);
+            padding: 0.875rem 1.25rem;
+            font-size: 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            background-color: var(--bg-light);
+        }
+        
+        .search-bar .form-control:focus {
+            border-color: var(--linkedin-blue);
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(10, 102, 194, 0.1);
+        }
+        
+        .search-bar .btn-search {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            padding: 0.875rem 2.5rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+        }
+        
+        .search-bar .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.4);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            margin-top: -3rem;
+            position: relative;
+            z-index: 2;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-item .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-item .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* Job Listings */
+        .job-listing-section {
+            padding: 4rem 0;
+        }
+        
+        .section-header {
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+        
+        .job-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .job-card:hover {
+            border-color: var(--linkedin-blue);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+        
+        .job-card:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .job-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .job-card .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .job-meta-item i {
+            color: var(--linkedin-blue);
+        }
+        
+        .job-card .job-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .job-card .btn-apply {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .job-card .btn-apply:hover {
+            color: white;
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--linkedin-blue);
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--text-primary);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer h5 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p.lead {
+                font-size: 1.1rem;
+            }
+            
+            .search-bar .input-group {
+                flex-direction: column;
+            }
+            
+            .search-bar .btn-search {
+                width: 100%;
+            }
+            
+            .stats-section {
+                margin-top: -2rem;
+            }
+            
+            .stat-item .stat-number {
+                font-size: 2rem;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+           <div class="nav-links d-flex align-items-center gap-2">
+
+    <a href="/jobs" class="nav-link">
+        <i class="bi bi-briefcase me-1"></i> Jobs
+    </a>
+
+    <!-- NOT logged in -->
+    <span sec:authorize="!isAuthenticated()" class="d-flex align-items-center gap-2">
+        <a href="/login" class="nav-link">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+        </a>
+        <a href="/users/register" class="nav-link btn-primary">
+            <i class="bi bi-person-plus me-1"></i> Register
+        </a>
+    </span>
+
+    <!-- USER -->
+    <span sec:authorize="hasRole('USER')" class="d-flex align-items-center gap-2">
+        <a href="/applications/my-applications" class="nav-link">
+            <i class="bi bi-file-earmark-text me-1"></i> My Applications
+        </a>
+    </span>
+
+    <!-- RECRUITER -->
+    <span sec:authorize="hasRole('RECRUITER')" class="d-flex align-items-center gap-2">
+        <a href="/recruiter/dashboard" class="nav-link">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+        </a>
+        <a href="/jobs/new" class="nav-link">
+            <i class="bi bi-plus-circle me-1"></i> Post Job
+        </a>
+    </span>
+                
+                <!-- User Profile Dropdown (when logged in) -->
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <div class="user-profile" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="user-avatar" th:text="${#strings.substring(#authentication.name, 0, 1).toUpperCase()}">U</div>
+                        <div class="user-info">
+                            <span class="user-name" th:text="${userName != null ? userName : 'User'}">User</span>
+                            <span class="user-role" sec:authorize="hasRole('USER')">Job Seeker</span>
+                            <span class="user-role" sec:authorize="hasRole('RECRUITER')">Recruiter</span>
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li sec:authorize="hasRole('USER')">
+                            <a class="dropdown-item" href="/applications/my-applications">
+                                <i class="bi bi-file-earmark-text"></i> My Applications
+                            </a>
+                        </li>
+                        <li sec:authorize="hasRole('RECRUITER')">
+                            <a class="dropdown-item" href="/recruiter/dashboard">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li sec:authorize="hasRole('RECRUITER')">
+                            <a class="dropdown-item" href="/jobs/new">
+                                <i class="bi bi-plus-circle"></i> Post New Job
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" style="margin: 0;">
+                                <button type="submit" class="dropdown-item" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1>Discover Your Next Opportunity</h1>
+            <p class="lead">Connect with top employers and find your dream job today</p>
+            
+            <form class="search-bar" th:action="@{/jobs}" method="get">
+    <div class="input-group">
+        <input type="text" 
+               name="keyword" 
+               class="form-control" 
+               placeholder="Job title, keywords, or company"
+               th:value="${param.keyword}">
+        <input type="text" 
+               name="location" 
+               class="form-control" 
+               placeholder="City or remote"
+               th:value="${param.location}">
+        <button type="submit" class="btn btn-search">
+            <i class="bi bi-search me-2"></i> Search Jobs
+        </button>
+    </div>
+</form>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<div class="container">
+    <div class="stats-section">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Active Jobs</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">5K+</span>
+                    <span class="stat-label">Companies</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Job Seekers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Job Listings -->
+<section class="job-listing-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Featured Jobs</h2>
+            <p>Explore opportunities from top companies</p>
+        </div>
+        
+        <div class="row g-4">
+            <div th:each="job : ${jobs.content}" class="col-lg-6">
+                <div class="job-card">
+                    <h3 th:text="${job.title}">Senior Software Engineer</h3>
+                    
+                    <div class="job-meta">
+                        <div class="job-meta-item">
+                            <i class="bi bi-building"></i>
+                            <strong th:text="${job.company}">Tech Corp</strong>
+                        </div>
+                        <div class="job-meta-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <span th:text="${job.location}">San Francisco, CA</span>
+                        </div>
+                    </div>
+                    
+                    <p class="job-description" th:text="${job.description}">
+                        We are looking for a talented software engineer to join our growing team...
+                    </p>
+                    
+                    <a th:href="@{'/jobs/' + ${job.id}}" class="btn-apply">
+                        View Details <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div th:if="${jobs.content.size() == 0}" class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h3>No Jobs Available</h3>
+            <p>Check back later for new opportunities!</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+             
+                <h5>Company</h5>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact</a>
+                <a href="privacy-policy">Privacy Policy</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LinkedOut. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Add scroll effect to navbar
+    window.addEventListener('scroll', function() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+</script>
+
+</body>
+</html>

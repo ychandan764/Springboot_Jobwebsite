@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applicants - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --purple-accent: #7c3aed;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --warning-yellow: #f59e0b;
+            --danger-red: #dc2626;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .btn-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            color: var(--linkedin-blue);
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--purple-accent) 100%);
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        /* Job Info Card */
+        .job-info-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+        
+        .job-info-card h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .meta-item i {
+            color: var(--linkedin-blue);
+        }
+        
+        /* Applicant Card */
+        .applicant-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .applicant-card:hover {
+            border-color: var(--linkedin-blue);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .applicant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .applicant-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .applicant-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--purple-accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .applicant-details h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+        }
+        
+        .applicant-details p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning-yellow);
+        }
+        
+        .status-badge.accepted {
+            background: rgba(5, 118, 66, 0.15);
+            color: var(--success-green);
+        }
+        
+        .status-badge.rejected {
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--danger-red);
+        }
+        
+        .applicant-actions {
+            display: flex;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .btn-action {
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-accept {
+            background: linear-gradient(135deg, var(--success-green) 0%, #045d35 100%);
+            color: white;
+        }
+        
+        .btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(5, 118, 66, 0.3);
+        }
+        
+        .btn-reject {
+            background: transparent;
+            color: var(--danger-red);
+            border: 2px solid var(--danger-red);
+        }
+        
+        .btn-reject:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .empty-state-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+        
+        .empty-state-icon i {
+            font-size: 3.5rem;
+            color: var(--linkedin-blue);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .applicant-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .applicant-actions {
+                flex-direction: column;
+            }
+            
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <a href="/recruiter/dashboard" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <div class="page-header-content">
+            <h1>Job Applicants</h1>
+            <p>Review and manage applications for this position</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Job Info -->
+    <div class="job-info-card">
+        <h2 th:text="${job.title}">Senior Software Engineer</h2>
+        <div class="job-meta">
+            <div class="meta-item">
+                <i class="bi bi-building"></i>
+                <span th:text="${job.company}">Tech Corp</span>
+            </div>
+            <div class="meta-item">
+                <i class="bi bi-geo-alt"></i>
+                <span th:text="${job.location}">San Francisco, CA</span>
+            </div>
+            <div class="meta-item">
+                <i class="bi bi-people"></i>
+                <strong th:text="${applications.size()} + ' applicants'">0 applicants</strong>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Applicants List -->
+    <div th:if="${applications.size() > 0}">
+        <h3 class="mb-4">All Applicants</h3>
+        
+        <div th:each="app : ${applications}" class="applicant-card">
+            <div class="applicant-header">
+                <div class="applicant-info">
+                    <div class="applicant-avatar" th:text="${#strings.substring(app.userName, 0, 1)}">J</div>
+                    <div class="applicant-details">
+                        <h4 th:text="${app.userName}">John Doe</h4>
+                        <p><i class="bi bi-envelope me-1"></i><span th:text="${app.userEmail}">john@example.com</span></p>
+                        <p class="mt-1"><i class="bi bi-calendar me-1"></i>Applied 3 days ago</p>
+                    </div>
+                </div>
+                
+                <span class="status-badge" 
+                      th:classappend="${#strings.toLowerCase(app.status)}"
+                      th:text="${app.status}">
+                    Pending
+                </span>
+            </div>
+            
+            <div class="applicant-actions" th:if="${app.status == 'PENDING'}">
+                <form th:action="@{'/recruiter/application/' + ${app.id} + '/status/ACCEPTED'}" method="get" style="display: inline;">
+                    <button type="submit" class="btn-action btn-accept">
+                        <i class="bi bi-check-circle"></i> Accept
+                    </button>
+                </form>
+                
+                <form th:action="@{'/recruiter/application/' + ${app.id} + '/status/REJECTED'}" method="get" style="display: inline;">
+                    <button type="submit" class="btn-action btn-reject">
+                        <i class="bi bi-x-circle"></i> Reject
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div th:if="${applications.size() == 0}" class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-people"></i>
+        </div>
+        <h3>No Applications Yet</h3>
+        <p>Check back later to see who has applied for this position</p>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

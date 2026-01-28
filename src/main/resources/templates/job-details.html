@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --linkedin-light: #378fe9;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --success-green: #057642;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo:hover {
+            color: var(--linkedin-dark);
+        }
+        
+        .btn-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            color: var(--linkedin-blue);
+        }
+        
+        /* Job Header */
+        .job-header {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .job-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .job-header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .job-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .job-meta-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.05rem;
+        }
+        
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .job-meta-item i {
+            font-size: 1.2rem;
+        }
+        
+        /* Main Content */
+        .job-content-wrapper {
+            margin-bottom: 3rem;
+        }
+        
+        .job-details-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-title i {
+            color: var(--linkedin-blue);
+        }
+        
+        .job-description {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        
+        /* Sidebar */
+        .sidebar-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .info-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-label i {
+            color: var(--linkedin-blue);
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Apply Button */
+        .btn-apply {
+            background: linear-gradient(135deg, var(--success-green) 0%, #045d35 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(5, 118, 66, 0.3);
+            margin-bottom: 1rem;
+        }
+        
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(5, 118, 66, 0.4);
+        }
+        
+        .btn-save {
+            background: transparent;
+            color: var(--linkedin-blue);
+            border: 2px solid var(--linkedin-blue);
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save:hover {
+            background: var(--linkedin-blue);
+            color: white;
+        }
+        
+        /* Tags */
+        .tags-section {
+            margin-top: 2rem;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: rgba(10, 102, 194, 0.1);
+            color: var(--linkedin-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        
+        /* Alert */
+        .alert-custom {
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.1) 0%, rgba(10, 102, 194, 0.05) 100%);
+            border: 2px solid rgba(10, 102, 194, 0.2);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-custom i {
+            color: var(--linkedin-blue);
+            font-size: 1.25rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .job-title {
+                font-size: 2rem;
+            }
+            
+            .job-meta-header {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .job-details-card {
+                padding: 1.5rem;
+            }
+            
+            .sidebar-card {
+                position: relative;
+                top: 0;
+                margin-top: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <a href="/jobs" class="btn-back">
+            <i class="bi bi-arrow-left"></i> Back to Jobs
+        </a>
+    </div>
+</nav>
+
+<!-- Job Header -->
+<div class="job-header">
+    <div class="container">
+        <div class="job-header-content">
+            <h1 class="job-title" th:text="${job.title}">Senior Software Engineer</h1>
+            
+            <div class="job-meta-header">
+                <div class="job-meta-item">
+                    <i class="bi bi-building"></i>
+                    <strong th:text="${job.company}">Tech Corporation</strong>
+                </div>
+                <div class="job-meta-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <span th:text="${job.location}">San Francisco, CA</span>
+                </div>
+                <div class="job-meta-item">
+                    <i class="bi bi-clock"></i>
+                    <span>Posted 2 days ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <div class="row job-content-wrapper">
+        <!-- Job Details -->
+        <div class="col-lg-8">
+            <div class="alert-custom d-flex align-items-start gap-3">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Quick Apply Available</strong>
+                    <p class="mb-0 mt-1" style="color: var(--text-secondary);">Apply with your LinkedOut profile in one click</p>
+                </div>
+            </div>
+            
+            <div class="job-details-card">
+                <h2 class="section-title">
+                    <i class="bi bi-file-text"></i>
+                    Job Description
+                </h2>
+                <div class="job-description" th:text="${job.description}">
+                    We are seeking a talented and experienced Senior Software Engineer to join our growing team. 
+                    In this role, you will be responsible for designing, developing, and maintaining high-quality 
+                    software solutions that power our platform used by millions of users worldwide.
+                    
+                    You will work closely with cross-functional teams including product managers, designers, 
+                    and other engineers to deliver innovative features and improvements.
+                </div>
+            </div>
+            
+             
+     
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="sidebar-card">
+                <form th:action="@{'/applications/apply/' + ${job.id}}" method="post">
+                    <button type="submit" class="btn btn-apply">
+                        <i class="bi bi-send-fill"></i>
+                        Apply for this Job
+                    </button>
+                </form>
+                
+                
+                
+                <hr class="my-4">
+                
+                 
+                
+                <div class="mt-4 p-3" style="background: rgba(10, 102, 194, 0.05); border-radius: 0.75rem;">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-lightning-fill" style="color: var(--linkedin-blue);"></i>
+                        <strong style="color: var(--text-primary);">Quick Stats</strong>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0;">
+                        Be one of the first 50 applicants
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

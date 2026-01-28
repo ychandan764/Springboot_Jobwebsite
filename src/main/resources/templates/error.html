@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --danger-red: #dc2626;
+            --warning-yellow: #f59e0b;
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f3f6f8 0%, #e8eef3 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .error-container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .error-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* 404 Error - Blue */
+        .error-404 .error-icon {
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.15) 0%, rgba(10, 102, 194, 0.05) 100%);
+            color: var(--linkedin-blue);
+        }
+        
+        /* 403 Error - Red */
+        .error-403 .error-icon {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%);
+            color: var(--danger-red);
+        }
+        
+        /* 500 Error - Yellow */
+        .error-500 .error-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
+            color: var(--warning-yellow);
+        }
+        
+        /* Default Error - Blue */
+        .error-default .error-icon {
+            background: linear-gradient(135deg, rgba(10, 102, 194, 0.15) 0%, rgba(10, 102, 194, 0.05) 100%);
+            color: var(--linkedin-blue);
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+        
+        .error-details {
+            background: rgba(10, 102, 194, 0.05);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .error-details h6 {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .error-details p {
+            color: var(--text-secondary);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .error-details code {
+            background: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: var(--danger-red);
+            font-size: 0.9rem;
+        }
+        
+        .btn-home {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+            margin-right: 1rem;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 102, 194, 0.4);
+            color: white;
+        }
+        
+        .btn-back {
+            background: transparent;
+            color: var(--linkedin-blue);
+            padding: 1rem 2rem;
+            border: 2px solid var(--linkedin-blue);
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            background: var(--linkedin-blue);
+            color: white;
+        }
+        
+        .helpful-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .helpful-links h6 {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .help-link {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            background: rgba(10, 102, 194, 0.05);
+            text-decoration: none;
+            color: var(--linkedin-blue);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .help-link:hover {
+            background: rgba(10, 102, 194, 0.1);
+            transform: translateY(-2px);
+            color: var(--linkedin-dark);
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            margin-bottom: 2rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .footer-text {
+            margin-top: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+            
+            .error-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .btn-home, .btn-back {
+                width: 100%;
+                justify-content: center;
+                margin: 0.5rem 0;
+            }
+            
+            .link-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="error-container">
+    <a href="/" class="logo">LinkedOut</a>
+    
+    <!-- Error content based on status code -->
+    <div class="error-card" th:classappend="${status == 404 ? 'error-404' : (status == 403 ? 'error-403' : (status == 500 ? 'error-500' : 'error-default'))}">
+        
+        <!-- 404 Not Found -->
+        <div th:if="${status == 404}">
+            <div class="error-icon">
+                <i class="bi bi-compass"></i>
+            </div>
+            <div class="error-code">404</div>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-message">
+                Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+            </p>
+        </div>
+        
+        <!-- 403 Forbidden -->
+        <div th:if="${status == 403}">
+            <div class="error-icon">
+                <i class="bi bi-shield-lock"></i>
+            </div>
+            <div class="error-code">403</div>
+            <h1 class="error-title">Access Denied</h1>
+            <p class="error-message">
+                Sorry, you don't have permission to access this page. Please check your credentials or contact support.
+            </p>
+        </div>
+        
+        <!-- 500 Internal Server Error -->
+        <div th:if="${status == 500}">
+            <div class="error-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="error-code">500</div>
+            <h1 class="error-title">Server Error</h1>
+            <p class="error-message">
+                Something went wrong on our end. We're working to fix it. Please try again later.
+            </p>
+        </div>
+        
+        <!-- Default Error -->
+        <div th:if="${status != 404 && status != 403 && status != 500}">
+            <div class="error-icon">
+                <i class="bi bi-emoji-frown"></i>
+            </div>
+            <div class="error-code" th:text="${status != null ? status : 'Error'}">Error</div>
+            <h1 class="error-title">Something Went Wrong</h1>
+            <p class="error-message">
+                We encountered an unexpected error. Please try again or contact support if the problem persists.
+            </p>
+        </div>
+        
+        <!-- Error Details (only show if message exists) -->
+        <div class="error-details" th:if="${message != null}">
+            <h6><i class="bi bi-info-circle me-2"></i>Technical Details:</h6>
+            <p><strong>Error:</strong> <code th:text="${message}">Error message</code></p>
+            <p th:if="${path != null}"><strong>Path:</strong> <span th:text="${path}">/path</span></p>
+            <p th:if="${timestamp != null}"><strong>Time:</strong> <span th:text="${timestamp}">timestamp</span></p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div>
+            <a href="/" class="btn-home">
+                <i class="bi bi-house"></i> Go Home
+            </a>
+            <a href="javascript:history.back()" class="btn-back">
+                <i class="bi bi-arrow-left"></i> Go Back
+            </a>
+        </div>
+        
+        <!-- Helpful Links -->
+        <div class="helpful-links">
+            <h6>Need Help?</h6>
+            <div class="link-grid">
+                <a href="/jobs" class="help-link">
+                    <i class="bi bi-briefcase"></i> Browse Jobs
+                </a>
+                <a href="/contact" class="help-link">
+                    <i class="bi bi-chat-dots"></i> Contact Us
+                </a>
+                <a href="/about" class="help-link">
+                    <i class="bi bi-info-circle"></i> About Us
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <p class="footer-text">
+        If you continue to experience issues, please contact our support team at 
+        <a href="mailto:support@linkedout.com" style="color: var(--linkedin-blue); text-decoration: none;">support@linkedout.com</a>
+    </p>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

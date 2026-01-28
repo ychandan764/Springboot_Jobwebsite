@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - LinkedOut</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --linkedin-blue: #0a66c2;
+            --linkedin-dark: #004182;
+            --bg-light: #f3f6f8;
+            --bg-card: #ffffff;
+            --text-primary: #191919;
+            --text-secondary: #666666;
+            --border-color: #e8e8e8;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--linkedin-blue);
+            text-decoration: none;
+        }
+        
+        .nav-link {
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .nav-link:hover {
+            color: var(--linkedin-blue);
+            background-color: rgba(10, 102, 194, 0.08);
+        }
+        
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--linkedin-blue) 0%, var(--linkedin-dark) 100%);
+            padding: 3rem 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+        
+        /* Content */
+        .content-section {
+            padding: 3rem 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .content-card h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem 0;
+        }
+        
+        .content-card h2:first-child {
+            margin-top: 0;
+        }
+        
+        .content-card h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--linkedin-blue);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+        
+        .content-card p {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .content-card ul, .content-card ol {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .content-card li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .last-updated {
+            background: rgba(10, 102, 194, 0.1);
+            border-left: 4px solid var(--linkedin-blue);
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-box {
+            background: var(--bg-light);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .contact-box h4 {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        
+        .contact-box a {
+            color: var(--linkedin-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+        
+        .footer a:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">LinkedOut</a>
+        <div class="d-flex gap-2">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/jobs" class="nav-link">Jobs</a>
+            <a href="/about" class="nav-link">About</a>
+            <a href="/contact" class="nav-link">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<div class="page-header">
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p>Your privacy is important to us</p>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="container content-section">
+    <div class="content-card">
+        
+        <div class="last-updated">
+            <strong><i class="bi bi-calendar-check me-2"></i>Last Updated:</strong> January 28, 2026
+        </div>
+        
+        <h2>1. Introduction</h2>
+        <p>
+            Welcome to LinkedOut ("we," "our," or "us"). We are committed to protecting your personal information 
+            and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard 
+            your information when you visit our website and use our services.
+        </p>
+        <p>
+            Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, 
+            please do not access the site or use our services.
+        </p>
+        
+        <h2>2. Information We Collect</h2>
+        
+        <h3>2.1 Personal Information</h3>
+        <p>We collect personal information that you voluntarily provide to us when you:</p>
+        <ul>
+            <li>Register for an account</li>
+            <li>Apply for jobs</li>
+            <li>Post job listings (for recruiters)</li>
+            <li>Contact us for support</li>
+            <li>Subscribe to our newsletter</li>
+        </ul>
+        
+        <p>This information may include:</p>
+        <ul>
+            <li><strong>Account Information:</strong> Name, email address, password</li>
+            <li><strong>Profile Information:</strong> Resume, work experience, education, skills</li>
+            <li><strong>Contact Information:</strong> Phone number, address</li>
+            <li><strong>Professional Information:</strong> Job preferences, salary expectations</li>
+        </ul>
+        
+        <h3>2.2 Automatically Collected Information</h3>
+        <p>When you visit our website, we automatically collect certain information about your device, including:</p>
+        <ul>
+            <li>IP address</li>
+            <li>Browser type and version</li>
+            <li>Operating system</li>
+            <li>Referring URLs</li>
+            <li>Pages viewed and time spent on pages</li>
+            <li>Clickstream data</li>
+        </ul>
+        
+        <h3>2.3 Cookies and Similar Technologies</h3>
+        <p>
+            We use cookies and similar tracking technologies to track activity on our service and store certain 
+            information. Cookies are files with a small amount of data that are sent to your browser from a website 
+            and stored on your device.
+        </p>
+        
+        <h2>3. How We Use Your Information</h2>
+        <p>We use the information we collect or receive to:</p>
+        <ul>
+            <li><strong>Provide Services:</strong> Facilitate job searches and applications</li>
+            <li><strong>Account Management:</strong> Create and manage your account</li>
+            <li><strong>Communication:</strong> Send you updates, notifications, and marketing materials</li>
+            <li><strong>Improvement:</strong> Analyze usage patterns to improve our services</li>
+            <li><strong>Security:</strong> Detect and prevent fraud and abuse</li>
+            <li><strong>Compliance:</strong> Comply with legal obligations</li>
+            <li><strong>Matching:</strong> Match job seekers with relevant opportunities</li>
+            <li><strong>Analytics:</strong> Generate usage statistics and insights</li>
+        </ul>
+        
+        <h2>4. Sharing Your Information</h2>
+        
+        <h3>4.1 With Recruiters and Employers</h3>
+        <p>
+            When you apply for a job, we share your application information (including your resume and profile) 
+            with the relevant recruiter or employer. This is necessary to facilitate the job application process.
+        </p>
+        
+        <h3>4.2 Service Providers</h3>
+        <p>
+            We may share your information with third-party service providers who perform services on our behalf, 
+            such as:
+        </p>
+        <ul>
+            <li>Cloud hosting providers</li>
+            <li>Email service providers</li>
+            <li>Analytics services</li>
+            <li>Payment processors</li>
+        </ul>
+        
+        <h3>4.3 Legal Requirements</h3>
+        <p>We may disclose your information if required to do so by law or in response to valid requests by public authorities.</p>
+        
+        <h3>4.4 Business Transfers</h3>
+        <p>
+            If we are involved in a merger, acquisition, or sale of assets, your information may be transferred 
+            as part of that transaction.
+        </p>
+        
+        <h2>5. Data Security</h2>
+        <p>
+            We implement appropriate technical and organizational security measures to protect your personal 
+            information against unauthorized access, alteration, disclosure, or destruction. These measures include:
+        </p>
+        <ul>
+            <li>Encryption of data in transit and at rest</li>
+            <li>Regular security assessments</li>
+            <li>Access controls and authentication</li>
+            <li>Employee training on data protection</li>
+            <li>Regular backups</li>
+        </ul>
+        <p>
+            However, no method of transmission over the Internet or electronic storage is 100% secure. 
+            While we strive to use commercially acceptable means to protect your information, we cannot 
+            guarantee its absolute security.
+        </p>
+        
+        <h2>6. Data Retention</h2>
+        <p>
+            We retain your personal information for as long as necessary to fulfill the purposes outlined in 
+            this privacy policy, unless a longer retention period is required or permitted by law.
+        </p>
+        <ul>
+            <li><strong>Active Accounts:</strong> Data retained while your account is active</li>
+            <li><strong>Closed Accounts:</strong> Data may be retained for up to 90 days after account closure</li>
+            <li><strong>Legal Requirements:</strong> Some data may be retained longer if required by law</li>
+        </ul>
+        
+        <h2>7. Your Privacy Rights</h2>
+        <p>Depending on your location, you may have the following rights regarding your personal information:</p>
+        <ul>
+            <li><strong>Access:</strong> Request a copy of the personal information we hold about you</li>
+            <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
+            <li><strong>Deletion:</strong> Request deletion of your personal information</li>
+            <li><strong>Portability:</strong> Request transfer of your data to another service</li>
+            <li><strong>Objection:</strong> Object to processing of your personal information</li>
+            <li><strong>Restriction:</strong> Request restriction of processing in certain circumstances</li>
+            <li><strong>Withdraw Consent:</strong> Withdraw consent where we rely on consent as legal basis</li>
+        </ul>
+        
+        <p>To exercise any of these rights, please contact us using the information provided below.</p>
+        
+        <h2>8. Children's Privacy</h2>
+        <p>
+            Our services are not intended for individuals under the age of 18. We do not knowingly collect 
+            personal information from children under 18. If you are a parent or guardian and believe your 
+            child has provided us with personal information, please contact us immediately.
+        </p>
+        
+        <h2>9. International Data Transfers</h2>
+        <p>
+            Your information may be transferred to and processed in countries other than your country of residence. 
+            These countries may have data protection laws that are different from the laws of your country.
+        </p>
+        <p>
+            We take appropriate safeguards to ensure that your personal information remains protected in 
+            accordance with this privacy policy when transferred internationally.
+        </p>
+        
+        <h2>10. Third-Party Links</h2>
+        <p>
+            Our website may contain links to third-party websites. We are not responsible for the privacy 
+            practices or content of these external sites. We encourage you to read the privacy policies of 
+            any third-party sites you visit.
+        </p>
+        
+        <h2>11. Updates to This Policy</h2>
+        <p>
+            We may update this privacy policy from time to time. We will notify you of any changes by posting 
+            the new privacy policy on this page and updating the "Last Updated" date.
+        </p>
+        <p>
+            We encourage you to review this privacy policy periodically for any changes. Changes to this privacy 
+            policy are effective when they are posted on this page.
+        </p>
+        
+        <h2>12. Cookie Policy</h2>
+        <p>We use the following types of cookies:</p>
+        <ul>
+            <li><strong>Essential Cookies:</strong> Necessary for the website to function properly</li>
+            <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website</li>
+            <li><strong>Functional Cookies:</strong> Enable enhanced functionality and personalization</li>
+            <li><strong>Advertising Cookies:</strong> Used to deliver relevant advertisements</li>
+        </ul>
+        <p>
+            You can control cookies through your browser settings. However, disabling cookies may affect 
+            the functionality of our website.
+        </p>
+        
+        <h2>13. Do Not Track</h2>
+        <p>
+            Some browsers have a "Do Not Track" feature that lets you tell websites that you do not want to 
+            have your online activities tracked. We currently do not respond to Do Not Track signals.
+        </p>
+        
+        <h2>14. California Privacy Rights</h2>
+        <p>
+            If you are a California resident, you have specific rights regarding your personal information under 
+            the California Consumer Privacy Act (CCPA), including:
+        </p>
+        <ul>
+            <li>Right to know what personal information is collected</li>
+            <li>Right to know if personal information is sold or disclosed</li>
+            <li>Right to opt-out of the sale of personal information</li>
+            <li>Right to deletion of personal information</li>
+            <li>Right to non-discrimination for exercising privacy rights</li>
+        </ul>
+        
+        <h2>15. Contact Us</h2>
+        <p>If you have any questions or concerns about this privacy policy or our data practices, please contact us:</p>
+        
+        <div class="contact-box">
+            <h4><i class="bi bi-envelope me-2"></i>Privacy Team</h4>
+            <p>
+                <strong>Email:</strong> <a href="mailto:privacy@linkedout.com">privacy@linkedout.com</a><br>
+                <strong>Phone:</strong> <a href="tel:+919987652458">+91 9987652458</a><br>
+                <strong>Address:</strong> Mumbai, Maharashtra
+            </p>
+            <p style="margin-top: 1rem;">
+                <a href="/contact" class="btn btn-primary">
+                    <i class="bi bi-chat-dots me-2"></i>Contact Support
+                </a>
+            </p>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <p>&copy; 2026 LinkedOut. All rights reserved.</p>
+        <div class="mt-2">
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/jobs">Jobs</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
