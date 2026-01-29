@@ -607,21 +607,29 @@
             <p class="lead">Connect with top employers and find your dream job today</p>
             
             <form class="search-bar" th:action="@{/jobs}" method="get">
-    <div class="input-group">
-        <input type="text" 
-               name="keyword" 
-               class="form-control" 
+    <div class="row g-2">
+    <div class="col-12 col-md-5">
+        <input type="text"
+               name="keyword"
+               class="form-control"
                placeholder="Job title, keywords, or company"
                th:value="${param.keyword}">
-        <input type="text" 
-               name="location" 
-               class="form-control" 
+    </div>
+
+    <div class="col-12 col-md-4">
+        <input type="text"
+               name="location"
+               class="form-control"
                placeholder="City or remote"
                th:value="${param.location}">
-        <button type="submit" class="btn btn-search">
+    </div>
+
+    <div class="col-12 col-md-3">
+        <button type="submit" class="btn btn-search w-100">
             <i class="bi bi-search me-2"></i> Search Jobs
         </button>
     </div>
+</div>
 </form>
         </div>
     </div>

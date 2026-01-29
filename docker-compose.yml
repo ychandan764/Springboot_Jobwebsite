@@ -1,4 +1,4 @@
-version: "3.9"
+ 
 
 services:
   mysql:
@@ -14,7 +14,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   app:
-    image: yourdockerhubusername/jobportal-app:latest
+    image: chandan0412docker/jobportal-app:latest
     container_name: jobportal-app
     restart: always
     depends_on:
