@@ -21,12 +21,10 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     
-    /**
-     * Apply for a job
-     */
+    
     @Transactional
     public void apply(User user, Job job) {
-        // Check if user has already applied
+         
         boolean alreadyApplied = applicationRepository.existsByUser_IdAndJob_Id(
                 user.getId(),
                 job.getId()
@@ -46,9 +44,7 @@ public class ApplicationService {
         applicationRepository.save(application);
     }
 
-    /**
-     * Get all applications for a specific user
-     */
+    
     public List<ApplicationDto> getApplicationsByUser(Long userId) {
         return applicationRepository.findByUser_Id(userId)
                 .stream()
@@ -56,9 +52,7 @@ public class ApplicationService {
                 .toList();
     }
 
-    /**
-     * Get all applications for a specific job
-     */
+     
     public List<ApplicationDto> getApplicationsByJob(Long jobId) {
         return applicationRepository.findByJob_Id(jobId)
                 .stream()
@@ -66,9 +60,7 @@ public class ApplicationService {
                 .toList();
     }
 
-    /**
-     * Withdraw an application - user can only withdraw their own applications
-     */
+     
     @Transactional
     public void withdrawApplication(Long applicationId, Long userId) {
         Application application = applicationRepository.findById(applicationId)
@@ -76,14 +68,14 @@ public class ApplicationService {
                         "Application not found with id: " + applicationId
                 ));
 
-        // Verify the application belongs to the user
+        
         if (!application.getUser().getId().equals(userId)) {
             throw new UnauthorizedException(
                     "You don't have permission to withdraw this application"
             );
         }
 
-        // Can only withdraw pending applications
+        
         if (application.getStatus() != ApplicationStatus.PENDING) {
             throw new IllegalStateException(
                     "You can only withdraw pending applications"
@@ -93,9 +85,7 @@ public class ApplicationService {
         applicationRepository.delete(application);
     }
 
-    /**
-     * Update application status - only recruiters who own the job can do this
-     */
+     
     @Transactional
     public void updateStatus(Long applicationId, String status, Long recruiterId) {
         Application application = applicationRepository.findById(applicationId)
@@ -103,7 +93,7 @@ public class ApplicationService {
                         "Application not found with id: " + applicationId
                 ));
 
-        // Verify the job belongs to the recruiter
+       
         Job job = application.getJob();
         if (!job.getRecruiter().getId().equals(recruiterId)) {
             throw new UnauthorizedException(
@@ -120,9 +110,7 @@ public class ApplicationService {
         }
     }
 
-    /**
-     * Get application by ID
-     */
+    
     public ApplicationDto getApplicationById(Long id) {
         Application application = applicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -132,23 +120,17 @@ public class ApplicationService {
         return ApplicationMapper.toDto(application);
     }
 
-    /**
-     * Check if user has applied for a job
-     */
+    
     public boolean hasUserApplied(Long userId, Long jobId) {
         return applicationRepository.existsByUser_IdAndJob_Id(userId, jobId);
     }
 
-    /**
-     * Count applications for a job
-     */
+    
     public long countApplicationsByJob(Long jobId) {
         return applicationRepository.countByJob_Id(jobId);
     }
 
-    /**
-     * Count applications by status for a user
-     */
+    
     public long countApplicationsByUserAndStatus(Long userId, ApplicationStatus status) {
         return applicationRepository.countByUser_IdAndStatus(userId, status);
     }

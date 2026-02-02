@@ -24,9 +24,7 @@ public class RecruiterController {
     private final UserService userService;
     private final ApplicationService applicationService;
 
-    /**
-     * Recruiter dashboard - shows all jobs posted by the recruiter
-     */
+    
     @GetMapping("/dashboard")
     public String dashboard(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -44,9 +42,7 @@ public class RecruiterController {
         return "recruiter-dashboard";
     }
 
-    /**
-     * View applicants for a specific job
-     */
+    
     @GetMapping("/job/{jobId}/applicants")
     public String viewApplicants(
             @PathVariable Long jobId,
@@ -77,9 +73,7 @@ public class RecruiterController {
         }
     }
 
-    /**
-     * Update application status
-     */
+     
     @GetMapping("/application/{applicationId}/status/{status}")
     public String updateApplicationStatus(
             @PathVariable Long applicationId,

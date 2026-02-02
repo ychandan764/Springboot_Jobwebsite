@@ -1,8 +1,6 @@
 package com.example.jobportal.exception;
 
-/**
- * Exception thrown when a user tries to perform an action they're not authorized to do
- */
+ 
 public class UnauthorizedException extends RuntimeException {
     
     public UnauthorizedException(String message) {

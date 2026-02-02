@@ -29,19 +29,17 @@ public class ApplicationController {
     ) {
         User user = userService.findByEmail(userDetails.getUsername());
         
-        // Check if user has resume
+        
         if (user.getResumePath() == null || user.getResumePath().isEmpty()) {
-            // Redirect to resume upload
+            
             return "redirect:/resume-upload/" + jobId;
         }
         
-        // User has resume, proceed with application
+        
         return applyForJob(jobId, userDetails, redirectAttributes);
     }
 
-    /**
-     * Apply for a job - requires authentication
-     */
+    
     @PostMapping("/apply/{jobId}")
     public String applyForJob(
             @PathVariable Long jobId,
@@ -49,10 +47,10 @@ public class ApplicationController {
             RedirectAttributes redirectAttributes
     ) {
         try {
-            // Get authenticated user
+           
             User user = userService.findByEmail(userDetails.getUsername());
             
-            // Apply for the job
+            
             applicationService.apply(user, jobService.findEntityById(jobId));
             
             redirectAttributes.addFlashAttribute("success", "Application submitted successfully!");
@@ -64,9 +62,7 @@ public class ApplicationController {
         }
     }
 
-    /**
-     * View user's own applications - requires authentication
-     */
+     
     @GetMapping("/my-applications")
     public String myApplications(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -82,9 +78,7 @@ public class ApplicationController {
         return "my-applications";
     }
 
-    /**
-     * Withdraw an application - requires authentication
-     */
+    
     @PostMapping("/withdraw/{applicationId}")
     public String withdrawApplication(
             @PathVariable Long applicationId,

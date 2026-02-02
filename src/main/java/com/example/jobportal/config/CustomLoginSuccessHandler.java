@@ -24,18 +24,18 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
         
-        // Redirect to appropriate dashboard based on role
+       
         if (roles.contains("ROLE_ADMIN")) {
-            // Admins go to admin dashboard
+            
             response.sendRedirect("/admin/dashboard");
         } else if (roles.contains("ROLE_RECRUITER")) {
-            // Recruiters go to their dashboard
+             
             response.sendRedirect("/recruiter/dashboard");
         } else if (roles.contains("ROLE_USER")) {
-            // Job seekers go to browse jobs
+             
             response.sendRedirect("/jobs");
         } else {
-            // Default redirect to home
+            
             response.sendRedirect("/");
         }
     }

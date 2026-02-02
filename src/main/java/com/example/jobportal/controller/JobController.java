@@ -24,9 +24,7 @@ public class JobController {
     private final JobService jobService;
     private final UserService userService;
 
-    /**
-     * List all jobs with search and pagination
-     */
+    
     @GetMapping
     public String jobs(
             @RequestParam(defaultValue = "") String keyword,
@@ -41,27 +39,21 @@ public class JobController {
         return "jobs";
     }
 
-    /**
-     * View job details
-     */
+    
     @GetMapping("/{id}")
     public String jobDetails(@PathVariable Long id, Model model) {
         model.addAttribute("job", jobService.getJobById(id));
         return "job-details";
     }
 
-    /**
-     * Show job posting form - for recruiters only
-     */
+    
     @GetMapping("/new")
     public String createJobForm(Model model) {
         model.addAttribute("job", new JobDto());
         return "post-job";
     }
 
-    /**
-     * Save/create a new job posting
-     */
+    
     @PostMapping("/save")
     public String saveJob(
             @Valid @ModelAttribute("job") JobDto jobDto,
@@ -89,9 +81,7 @@ public class JobController {
         }
     }
 
-    /**
-     * Edit job form - for recruiters
-     */
+    
     @GetMapping("/edit/{id}")
     public String editJobForm(
             @PathVariable Long id,
@@ -103,7 +93,7 @@ public class JobController {
             User recruiter = userService.findByEmail(userDetails.getUsername());
             JobDto job = jobService.getJobById(id);
             
-            // Verify that the job belongs to this recruiter
+            
             if (!job.getRecruiterId().equals(recruiter.getId())) {
                 redirectAttributes.addFlashAttribute("error", "You don't have permission to edit this job");
                 return "redirect:/recruiter/dashboard";
@@ -118,9 +108,7 @@ public class JobController {
         }
     }
 
-    /**
-     * Update existing job
-     */
+    
     @PostMapping("/update/{id}")
     public String updateJob(
             @PathVariable Long id,
@@ -149,9 +137,7 @@ public class JobController {
         }
     }
 
-    /**
-     * Delete job
-     */
+    
     @PostMapping("/delete/{id}")
     public String deleteJob(
             @PathVariable Long id,

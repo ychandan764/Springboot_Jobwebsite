@@ -21,9 +21,7 @@ public class JobService {
 
     private final JobRepository jobRepository;
 
-    /**
-     * Search jobs with pagination
-     */
+     
     public Page<JobDto> searchJobs(
             String keyword,
             String location,
@@ -45,25 +43,19 @@ public class JobService {
                 .map(JobMapper::toDto);
     }
 
-    /**
-     * Get Job entity by ID - for internal use only
-     */
+     
     public Job findEntityById(Long id) {
         return jobRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Job not found with id: " + id));
     }
 
-    /**
-     * Get Job DTO by ID - for controllers/views
-     */
+     
     public JobDto getJobById(Long id) {
         return JobMapper.toDto(findEntityById(id));
     }
 
-    /**
-     * Create/Save a new job
-     */
+     
     @Transactional
     public JobDto save(JobDto dto, User recruiter) {
         Job job = new Job();
@@ -77,9 +69,7 @@ public class JobService {
         return JobMapper.toDto(savedJob);
     }
 
-    /**
-     * Update an existing job
-     */
+    
     @Transactional
     public JobDto update(Long jobId, JobDto dto, User recruiter) {
         Job job = findEntityById(jobId);
@@ -100,14 +90,12 @@ public class JobService {
         return JobMapper.toDto(updatedJob);
     }
 
-    /**
-     * Delete a job
-     */
+     
     @Transactional
     public void delete(Long jobId, Long recruiterId) {
         Job job = findEntityById(jobId);
 
-        // Verify the job belongs to the recruiter
+        
         if (!job.getRecruiter().getId().equals(recruiterId)) {
             throw new UnauthorizedException(
                     "You don't have permission to delete this job"
@@ -117,9 +105,7 @@ public class JobService {
         jobRepository.delete(job);
     }
 
-    /**
-     * Get all jobs posted by a specific recruiter
-     */
+     
     public List<JobDto> getJobsByRecruiter(Long recruiterId) {
         return jobRepository.findByRecruiter_Id(recruiterId)
                 .stream()
@@ -127,31 +113,23 @@ public class JobService {
                 .toList();
     }
 
-    /**
-     * Check if a job is owned by a specific recruiter
-     */
+     
     public boolean isJobOwnedByRecruiter(Long jobId, Long recruiterId) {
         Job job = findEntityById(jobId);
         return job.getRecruiter().getId().equals(recruiterId);
     }
 
-    /**
-     * Get total job count
-     */
+     
     public long getTotalJobCount() {
         return jobRepository.count();
     }
 
-    /**
-     * Get job count by recruiter
-     */
+    
     public long getJobCountByRecruiter(Long recruiterId) {
         return jobRepository.countByRecruiter_Id(recruiterId);
     }
 
-    /**
-     * Get recent jobs (limit)
-     */
+    
     public List<JobDto> getRecentJobs(int limit) {
         Pageable pageable = PageRequest.of(0, limit, Sort.by("createdAt").descending());
         return jobRepository.findAll(pageable)

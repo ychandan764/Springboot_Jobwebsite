@@ -24,7 +24,7 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // ✅ NORMAL USER
+        
         user.setRole(Role.USER);
         
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
@@ -41,7 +41,7 @@ public class UserService {
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // ✅ RECRUITER ROLE
+       
         user.setRole(Role.RECRUITER);
         
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {

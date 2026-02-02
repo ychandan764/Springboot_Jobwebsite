@@ -34,7 +34,7 @@ public class HomeController {
                 jobService.searchJobs(keyword, location, page, 6)
         );
         
-        // Add user name if logged in
+         
         if (userDetails != null) {
             User user = userService.findByEmail(userDetails.getUsername());
             model.addAttribute("userName", user.getName());

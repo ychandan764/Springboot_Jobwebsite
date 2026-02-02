@@ -29,15 +29,15 @@ public class JobDto {
     @Size(min = 2, max = 100, message = "Location must be between 2 and 100 characters")
     private String location;
     
-    // Recruiter information (for authorization checks)
+     
     private Long recruiterId;
     private String recruiterName;
     
-    // Timestamps
+     
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
-    // Statistics (optional - can be set separately)
+    
     private Long applicantCount;
     private Long viewCount;
 }

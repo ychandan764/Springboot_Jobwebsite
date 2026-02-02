@@ -11,22 +11,22 @@ import java.time.LocalDateTime;
 public class ApplicationDto {
     private Long id;
     
-    // User information
+    
     private Long userId;
     private String userName;
     private String userEmail;
     
-    // Job information
+    
     private Long jobId;
     private String jobTitle;
     private String company;
     private String location;
     
-    // Application details
+     
     private ApplicationStatus status;
     private LocalDateTime appliedAt;
     
-    // Helper method for display
+    
     public String getStatusDisplay() {
         return status != null ? status.name() : "PENDING";
     }
