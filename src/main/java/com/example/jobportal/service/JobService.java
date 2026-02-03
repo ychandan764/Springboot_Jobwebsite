@@ -74,7 +74,7 @@ public class JobService {
     public JobDto update(Long jobId, JobDto dto, User recruiter) {
         Job job = findEntityById(jobId);
 
-        // Verify the job belongs to the recruiter
+        
         if (!job.getRecruiter().getId().equals(recruiter.getId())) {
             throw new UnauthorizedException(
                     "You don't have permission to update this job"

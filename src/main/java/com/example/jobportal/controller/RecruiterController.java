@@ -53,7 +53,7 @@ public class RecruiterController {
         try {
             User recruiter = userService.findByEmail(userDetails.getUsername());
             
-            // Verify the job belongs to this recruiter
+            
             if (!jobService.isJobOwnedByRecruiter(jobId, recruiter.getId())) {
                 redirectAttributes.addFlashAttribute("error", "You don't have permission to view these applicants");
                 return "redirect:/recruiter/dashboard";

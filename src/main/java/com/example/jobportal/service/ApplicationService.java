@@ -75,7 +75,6 @@ public class ApplicationService {
             );
         }
 
-        
         if (application.getStatus() != ApplicationStatus.PENDING) {
             throw new IllegalStateException(
                     "You can only withdraw pending applications"
